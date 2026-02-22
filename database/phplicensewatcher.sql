@@ -110,6 +110,41 @@ CREATE TABLE IF NOT EXISTS `available` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4;
 
+-- -----------------------------------------------------
+-- Table `authorization`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `authorization` ;
+
+CREATE TABLE IF NOT EXISTS `authorization` (
+  `signon` VARCHAR(255) NOT NULL,
+  `access_level` TINYINT NOT NULL,
+  `first_name` VARCHAR(255),
+  `last_name` VARCHAR(255),
+  PRIMARY KEY (`signon`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
+
+-- -----------------------------------------------------
+-- Table `server_access`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `server_access` ;
+
+CREATE TABLE IF NOT EXISTS `server_access` (
+  `signon` VARCHAR(255) NOT NULL,
+  `server_id` INT UNSIGNED NOT NULL,
+  PRIMARY KEY (`signon`, `server_id`),
+  CONSTRAINT `fk_serveraccess_authorization1`
+    FOREIGN KEY (`signon`)
+    REFERENCES `authorization` (`signon`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_serveraccess_servers1`
+    FOREIGN KEY (`server_id`)
+    REFERENCES `servers` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
